@@ -161,14 +161,16 @@
             // Configure Map
             let homeLocation = JSON.parse(home);
             let homeLatLng = new google.maps.LatLng(homeLocation.latitude, homeLocation.longitude);
+
             let options = {
                 zoom: window.mapZoom,
                 center: homeLatLng,
-                mapTypeId: google.maps.MapTypeId.{%maptype%},
+                mapTypeId: '{%maptype%}',  // now a string, not an object reference
                 streetViewControl: false,
                 rotateControl: false,
                 fullscreenControl: false
-            };
+            };            
+
             window.map[id] = new google.maps.Map(document.getElementById('map-canvas-' + id.toString()), options);
 
             window.disableFollow = (id) => {
