@@ -207,10 +207,13 @@
             });
 
             // Place our home marker
-            window.homeMarker[id] = new google.maps.Marker({
+          window.homeMarker[id] = new google.maps.Marker({
                 position: homeLatLng,
                 map: window.map[id],
-                icon: 'data:image/png;base64,' + home_icon
+                icon: {
+                    url: 'data:image/png;base64,' + home_icon,
+                    scaledSize: new google.maps.Size(24, 24)  // Width x Height in pixels
+                }
             });
 
             // Fetch initial tracking marker
@@ -221,11 +224,14 @@
                             // Place the tracking marker
                             let trackerLocation = JSON.parse(data);
                             let trackerLatLng = new google.maps.LatLng(trackerLocation.latitude, trackerLocation.longitude);
-                            window.trackerMarker[id] = new google.maps.Marker({
-                                position: trackerLatLng,
-                                map: window.map[id],
-                                icon: 'data:image/png;base64,' + tracker_icon
-                            });
+                        window.trackerMarker[id] = new google.maps.Marker({
+                            position: trackerLatLng,
+                            map: window.map[id],
+                            icon: {
+                                url: 'data:image/png;base64,' + tracker_icon,
+                                scaledSize: new google.maps.Size(24, 24)
+                            }
+                        });
                             window.trackerMarkerState[id] = "follow";
                             window.map[id].panTo(trackerLatLng);
                         });
