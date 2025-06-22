@@ -19,6 +19,8 @@ class PositionTracking extends WebHookModule
         $this->RegisterPropertyString('APIKey', '');
         $this->RegisterPropertyInteger('SourceLatitude', 0);
         $this->RegisterPropertyInteger('SourceLongitude', 0);
+        $this->RegisterPropertyInteger('MapZoom', 16);
+        $this->RegisterPropertyString('MapType', 'SATELLITE');
         $this->RegisterPropertyInteger('UpdateLimit', 10);
         $this->RegisterPropertyString('MapWidth', '100%');
         $this->RegisterPropertyString('MapHeight', '600px');
@@ -127,6 +129,9 @@ class PositionTracking extends WebHookModule
         $map = str_replace('{%home%}', $this->GetDefaultLocation(), $map);
         $map = str_replace('{%home_icon%}', $this->ReadPropertyString('HomeIcon'), $map);
         $map = str_replace('{%tracker_icon%}', $this->ReadPropertyString('TrackerIcon'), $map);
+
+        $map = str_replace('{%zoom%}', strval($this->ReadPropertyInteger('MapZoom')), $map);
+        $map = str_replace('{%maptype%}', strtoupper($this->ReadPropertyString('MapType')), $map);
 
         $map = str_replace('{%follow_vehicle%}', $this->Translate('Follow vehicle'), $map);
 
