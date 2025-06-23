@@ -8,12 +8,22 @@
         {
             "type": "SelectVariable",
             "name": "SourceLatitude",
-            "caption": "Latitude"
+            "caption": "Tracker Latitude"
         },
         {
             "type": "SelectVariable",
             "name": "SourceLongitude",
-            "caption": "Longitude"
+            "caption": "Tracker Longitude"
+        },
+        {
+            "type": "SelectVariable",
+            "name": "HomeLatitude",
+            "caption": "Home Latitude"
+        },
+        {
+            "type": "SelectVariable",
+            "name": "HomeLongitude",
+            "caption": "Home Longitude"
         },
         {
             "type": "NumberSpinner",
