@@ -13,7 +13,7 @@ Erlaubt das Tracken z.B. von RoboMähern auf einer interaktiven Google Maps Kart
 
 ### 1. Funktionsumfang
 
-* Diese Modul zeigt eine Position aus je einer Breitengrad/Längengrad Variable auf einer Google Maps Karte an. Der Positions-Tracker aktualisiert dabei fortlaufend und automatisch, sodass z.B. ein Auto oder anderes Objekt interaktiv auf der Karte verfolgt werden kann. Dieses Modul wird am besten mit dem 'NMEA GPS' Modul kombiniert, welches laufend aktuelle GPS Daten empfängt. Für dieses Modul ist ein Google Maps API Key erforderlich, der bei massiver Benutzung Kosten verursachen kann. Für einen normalen Betrieb reicht das von Google bereitgestellte kostenlose Kontingent normalerweise vollkommen aus.    
+* Diese Modul zeigt eine Position aus je einer Breitengrad/Längengrad Variable auf einer Google Maps Karte an. Der Positions-Tracker aktualisiert dabei fortlaufend und automatisch, sodass z.B. ein RoboMäher oder anderes Objekt interaktiv auf der Karte verfolgt werden kann. Dieses Modul wird am besten mit dem 'NMEA GPS' Modul kombiniert, welches laufend aktuelle GPS Daten empfängt. Für dieses Modul ist ein Google Maps API Key erforderlich, der bei massiver Benutzung Kosten verursachen kann. Für einen normalen Betrieb reicht das von Google bereitgestellte kostenlose Kontingent normalerweise vollkommen aus.    
 
 ### 2. Vorraussetzungen
 
