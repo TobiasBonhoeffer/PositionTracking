@@ -94,8 +94,8 @@
             if (typeof (google) === 'undefined') {
                 // Declare a few variables
                 window.google = null; //Just make sure that it is not undefined
-                window.mapZoom = 19; // This will be replaced by module.php
-                window.socket = [];
+            window.mapZoom = {%zoom%};
+            window.socket = [];
                 window.map = [];
                 window.homeMarker = [];
                 window.trackerMarker = [];
