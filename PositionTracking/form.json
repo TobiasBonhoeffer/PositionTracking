@@ -27,6 +27,24 @@
         },
         {
             "type": "NumberSpinner",
+            "name": "MapZoom",
+            "caption": "Zoom Level",
+            "minimum": 1,
+            "maximum": 21
+        },
+        {
+            "type": "Select",
+            "name": "MapType",
+            "caption": "Map Type",
+            "options": [
+                { "caption": "Roadmap", "value": "roadmap" },
+                { "caption": "Satellite", "value": "satellite" },
+                { "caption": "Hybrid", "value": "hybrid" },
+                { "caption": "Terrain", "value": "terrain" }
+            ]
+        },
+        {
+            "type": "NumberSpinner",
             "name": "UpdateLimit",
             "caption": "Limit Update",
             "suffix": "seconds"
@@ -52,7 +70,7 @@
             "caption": "Icon (Tracker)"
         }
     ],
-    "actions":[
+    "actions": [
         {
             "type": "SelectLocation",
             "caption": "Location",
