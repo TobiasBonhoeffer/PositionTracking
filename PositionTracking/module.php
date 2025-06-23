@@ -128,7 +128,14 @@ class PositionTracking extends WebHookModule
 
         $map = str_replace('{%id%}', strval($this->InstanceID), $map);
         $map = str_replace('{%apikey%}', $this->ReadPropertyString('APIKey'), $map);
-        $map = str_replace('{%home%}', $this->GetDefaultLocation(), $map);
+        //$map = str_replace('{%home%}', $this->GetDefaultLocation(), $map);
+        //NEW
+        $home = json_encode([
+            'latitude'  => GetValue($this->ReadPropertyInteger('HomeLatitude')),
+            'longitude' => GetValue($this->ReadPropertyInteger('HomeLongitude'))
+        ]);
+        $map = str_replace('{%home%}', $home, $map);
+
         $map = str_replace('{%home_icon%}', $this->ReadPropertyString('HomeIcon'), $map);
         $map = str_replace('{%tracker_icon%}', $this->ReadPropertyString('TrackerIcon'), $map);
 
