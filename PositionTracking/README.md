@@ -1,5 +1,5 @@
 # PositionTracking
-Erlaubt das Tracken z.B. von Fahrzeugen auf einer interaktiven Google Maps Karte
+Erlaubt das Tracken z.B. von RoboMähern auf einer interaktiven Google Maps Karte. Basiert auf einem Modul von Paresy
 
 ### Inhaltsverzeichnis
 
@@ -22,8 +22,7 @@ Erlaubt das Tracken z.B. von Fahrzeugen auf einer interaktiven Google Maps Karte
 
 ### 3. Software-Installation
 
-* Über den Module Store das 'PositionTracking'-Modul installieren.
-* Alternativ über das Module Control folgende URL hinzufügen: https://github.com/paresy/PositionTracking
+* Über das Module Control folgende URL hinzufügen: https://github.com/TobiasBonhoeffer/PositionTracking
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
