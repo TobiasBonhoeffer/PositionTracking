@@ -125,8 +125,9 @@
                 window.trackerMarker[id].setPosition(latLng);
 
                 // Only pan to the marker if we want to follow the vehicle
-                if (window.trackerMarkerState[id] === "follow") {
-                    window.map[id].panTo(latLng);
+                // Following two lines commented out since we wnat the map stable
+                //if (window.trackerMarkerState[id] === "follow") { 
+                //    window.map[id].panTo(latLng);
                 }
             }
         }
