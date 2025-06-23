@@ -7,4 +7,4 @@
 Folgende Module beinhaltet das PositionTracking Repository:
 
 - __PositionTracking__ ([Dokumentation](PositionTracking))  
-	Erlaubt das Tracken z.B. von Fahrzeugen auf einer interaktiven Google Maps Karte
+	Erlaubt das Tracken z.B. von einem RoboMäher auf einer interaktiven Google Maps Karte
