@@ -58,7 +58,7 @@
           "type": "Button",
           "caption": "Refresh Map",
           "onClick": "RefreshMap"
-        }
+        },
         {
             "type": "NumberSpinner",
             "name": "UpdateLimit",
