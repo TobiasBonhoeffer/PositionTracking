@@ -78,11 +78,6 @@
             "name": "SimulatedLocation"
         },
         {
-          "type": "Button",
-          "caption": "Refresh Map",
-          "onClick": "RequestAction($id, \\\"RefreshMap\\\")"
-        },
-        {
             "type": "Button",
             "caption": "Simulate Location",
             "onClick": "PST_SendLocation($id, $SimulatedLocation)"
