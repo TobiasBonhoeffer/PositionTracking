@@ -85,7 +85,7 @@
         {
             "type": "Button",
             "caption": "Simulate Location",
-            "onClick": "PST_SendLocation($id, $SimulatedLocation);"
+            "onClick": "PST_SendLocation($id, $SimulatedLocation)"
         }
     ]
 }
