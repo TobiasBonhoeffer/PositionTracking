@@ -61,16 +61,6 @@
             "suffix": "seconds"
         },
         {
-            "type": "ValidationTextBox",
-            "name": "MapWidth",
-            "caption": "Map (Width)"
-        },
-        {
-            "type": "ValidationTextBox",
-            "name": "MapHeight",
-            "caption": "Map (Height)"
-        },
-        {
             "type": "SelectFile",
             "name": "HomeIcon",
             "caption": "Icon (Home)"
