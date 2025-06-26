@@ -77,6 +77,15 @@ class PositionTracking extends WebHookModule
         }
     }
 
+    public function RequestAction($ident, $value) 
+    {
+    switch ($ident) {
+        case 'RefreshMap':
+            $this->UpdateMap();
+            break;
+        }
+    }
+
     public function SendLocation(string $location)
     {
         $hcID = IPS_GetInstanceListByModuleID('{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}')[0];
