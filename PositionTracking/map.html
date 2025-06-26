@@ -112,12 +112,15 @@
                 window.moveMapMarker(id, latLng.latitude, latLng.longitude);
             });
 
+            const mapCenter = JSON.parse('{%map_center%}');
+            const centerLatLng = new google.maps.LatLng(mapCenter.latitude, mapCenter.longitude);
+            
             const homeLocation = JSON.parse(home);
             const homeLatLng = new google.maps.LatLng(homeLocation.latitude, homeLocation.longitude);
-
+            
             const options = {
                 zoom: window.mapZoom,
-                center: homeLatLng,
+                center: centerLatLng,
                 mapTypeId: '{%maptype%}',
                 streetViewControl: false,
                 rotateControl: false,
