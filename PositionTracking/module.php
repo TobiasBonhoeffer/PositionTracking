@@ -131,11 +131,13 @@ class PositionTracking extends WebHookModule
         $map = str_replace('{%id%}', strval($this->InstanceID), $map);
         $map = str_replace('{%apikey%}', $this->ReadPropertyString('APIKey'), $map);
         $homeLocation = $this->GetDefaultLocation();
-        IPS_LogMessage("DEBUG", "Default Location JSON: " . $homeLocation);
-   
+        
+        $centerLat = $this->ReadPropertyInteger('MapCenterLatitude') ?: $this->ReadPropertyInteger('HomeLatitude');
+        $centerLng = $this->ReadPropertyInteger('MapCenterLongitude') ?: $this->ReadPropertyInteger('HomeLongitude');
+        
         $home = json_encode([
-            'latitude'  => GetValue($this->ReadPropertyInteger('HomeLatitude')),
-            'longitude' => GetValue($this->ReadPropertyInteger('HomeLongitude'))
+            'latitude'  => GetValue($centerLat),
+            'longitude' => GetValue($centerLng)
         ]);
 
         IPS_LogMessage("DEBUG", "Home Location JSON: " . $home);
