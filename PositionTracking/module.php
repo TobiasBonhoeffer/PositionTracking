@@ -78,12 +78,15 @@ class PositionTracking extends WebHookModule
         }
     }
 
-    public function RequestAction($ident, $value) 
+    public function RequestAction($Ident, $Value)
     {
-    switch ($ident) {
-        case 'RefreshMap':
-            $this->UpdateMap();
-            break;
+        switch ($Ident) {
+            case 'RefreshMap':
+                $this->UpdateMap();
+                break;
+    
+            default:
+                throw new Exception("Invalid ident: $Ident");
         }
     }
 
