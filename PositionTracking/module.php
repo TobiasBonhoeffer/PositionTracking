@@ -25,6 +25,7 @@ class PositionTracking extends WebHookModule
         $this->RegisterPropertyInteger('MapCenterLongitude', 0);
         $this->RegisterPropertyInteger('MapZoom', 18);
         $this->RegisterPropertyString('MapType', 'SATELLITE');
+        $this->EnableAction("RefreshMap");
         $this->RegisterPropertyInteger('UpdateLimit', 10);
         $this->RegisterPropertyString('MapWidth', '100%');
         $this->RegisterPropertyString('MapHeight', '600px');
