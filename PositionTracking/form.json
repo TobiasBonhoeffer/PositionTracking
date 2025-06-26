@@ -80,7 +80,7 @@
         {
           "type": "Button",
           "caption": "Refresh Map",
-          "onClick": "RefreshMap"
+          "onClick": "RequestAction($id, 'RefreshMap')"
         },
         {
             "type": "Button",
