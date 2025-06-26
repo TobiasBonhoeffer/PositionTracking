@@ -122,8 +122,8 @@ class PositionTracking extends WebHookModule
 
         $map = file_get_contents(__DIR__ . '/map.html');
 
-        $map = str_replace('height: 0; /* Replace Hook */', 'height: ' . $this->ReadPropertyString('MapHeight') . ';', $map);
-        $map = str_replace('width: 0; /* Replace Hook */', 'width: ' . $this->ReadPropertyString('MapWidth') . ';', $map);
+        //$map = str_replace('height: 0; /* Replace Hook */', 'height: ' . $this->ReadPropertyString('MapHeight') . ';', $map);
+        //$map = str_replace('width: 0; /* Replace Hook */', 'width: ' . $this->ReadPropertyString('MapWidth') . ';', $map);
 
         $map = str_replace('map-canvas-id', 'map-canvas-' . $this->InstanceID, $map);
         $map = str_replace('map-button-id', 'map-button-' . $this->InstanceID, $map);
