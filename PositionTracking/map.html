@@ -88,12 +88,18 @@
             }
         }
 
-        window.moveMapMarker = function (id, latitude, longitude) {
-            if (typeof (window.trackerMarker[id]) !== 'undefined') {
-                let latLng = new google.maps.LatLng(latitude, longitude);
+        window.moveMapMarker = function (id, latitude, longitude, heading = 0) {
+            const latLng = new google.maps.LatLng(latitude, longitude);
+            if (window.trackerMarker[id]) {
                 window.trackerMarker[id].setPosition(latLng);
+                window.trackerMarker[id].setIcon({
+                    url: window.trackerMarker[id].icon.url,
+                    scaledSize: new google.maps.Size(36, 36),
+                    rotation: heading
+                });
             }
         }
+        
 
         window.initMaps = function () {
             for (let map of window.derferredMaps) {
@@ -108,14 +114,16 @@
                 window.socket[id].close();
             }
 
+            
+            
             window.socket[id] = new WebSocket(
                 location.protocol.replace(/^http/, 'ws') +
                 "//" + location.host + "/hook/position_tracking/" + id.toString()
             );
 
             window.socket[id].addEventListener('message', function (event) {
-                const latLng = JSON.parse(event.data);
-                window.moveMapMarker(id, latLng.latitude, latLng.longitude);
+                const data = JSON.parse(event.data);
+                window.moveMapMarker(id, data.latitude, data.longitude, data.heading || 0);
             });
 
             const mapCenter = JSON.parse('{%map_center%}');
