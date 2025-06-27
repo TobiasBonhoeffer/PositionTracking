@@ -182,16 +182,28 @@
                 .then(response => response.json())
                 .then(data => {
                     let trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
+            
+                    const heading = {%rotation_angle%};  // Replace with a numeric angle, injected from PHP
+            
+                    const icon = {
+                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+                            `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 100 100" transform="rotate(${heading})">
+                                <image href="data:image/png;base64,${tracker_icon}" height="100" width="100"/>
+                            </svg>`
+                        ),
+                        scaledSize: new google.maps.Size(36, 36)
+                    };
+            
                     window.trackerMarker[id] = new google.maps.Marker({
                         position: trackerLatLng,
                         map: window.map[id],
-                        icon: {
-                            url: 'data:image/png;base64,' + tracker_icon,
-                            scaledSize: new google.maps.Size(36, 36)
-                        }
+                        icon: icon
                     });
+            
                     window.trackerMarkerState[id] = "follow";
                 });
+            
+
         }
 
         useMap(parseInt('{%id%}'), '{%home%}', '{%home_icon%}', '{%tracker_icon%}');
