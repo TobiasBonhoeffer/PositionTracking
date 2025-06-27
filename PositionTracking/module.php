@@ -180,6 +180,7 @@ class PositionTracking extends WebHookModule
         ]);
         
         $map = str_replace('{%map_center%}', $mapCenter, $map);
+        $map = str_replace('{%heading_angle%}', strval($heading), $map);
         $map = str_replace('{%home%}', $home, $map);;
 
         $map = str_replace('{%home_icon%}', $this->ReadPropertyString('HomeIcon'), $map);
