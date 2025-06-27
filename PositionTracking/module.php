@@ -168,6 +168,8 @@ class PositionTracking extends WebHookModule
         
         $centerLatID = $this->ReadPropertyInteger('MapCenterLatitude') ?: $this->ReadPropertyInteger('HomeLatitude');
         $centerLngID = $this->ReadPropertyInteger('MapCenterLongitude') ?: $this->ReadPropertyInteger('HomeLongitude');
+
+        
         
         $mapCenter = json_encode([
             'latitude'  => GetValue($centerLatID),
@@ -178,6 +180,11 @@ class PositionTracking extends WebHookModule
             'latitude'  => GetValue($this->ReadPropertyInteger('HomeLatitude')),
             'longitude' => GetValue($this->ReadPropertyInteger('HomeLongitude'))
         ]);
+
+        $heading = 0;
+        if ($this->ReadPropertyInteger('HeadingVariable') > 0) {
+            $heading = GetValue($this->ReadPropertyInteger('HeadingVariable'));
+        }
         
         $map = str_replace('{%map_center%}', $mapCenter, $map);
         $map = str_replace('{%heading_angle%}', strval($heading), $map);
