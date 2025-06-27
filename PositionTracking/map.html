@@ -183,7 +183,7 @@
                 .then(data => {
                     let trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
             
-                    const heading = {%rotation_angle%};  // Replace with a numeric angle, injected from PHP
+                    const heading = {%heading_angle%};  // Replace with a numeric angle, injected from PHP
             
                     const icon = {
                         url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
