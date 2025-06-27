@@ -19,6 +19,7 @@ class PositionTracking extends WebHookModule
         $this->RegisterPropertyString('APIKey', '');
         $this->RegisterPropertyInteger('SourceLatitude', 0);
         $this->RegisterPropertyInteger('SourceLongitude', 0);
+        $this->RegisterPropertyInteger('HeadingVariable', 0);
         $this->RegisterPropertyInteger('HomeLatitude', 0);
         $this->RegisterPropertyInteger('HomeLongitude', 0);
         $this->RegisterPropertyInteger('MapCenterLatitude', 0);
@@ -66,6 +67,10 @@ class PositionTracking extends WebHookModule
             $this->RegisterMessage($this->ReadPropertyInteger('SourceLongitude'), VM_UPDATE);
             $this->RegisterReference($this->ReadPropertyInteger('SourceLongitude'));
         }
+        if ($this->ReadPropertyInteger('HeadingVariable') > 0) {
+        $this->RegisterMessage($this->ReadPropertyInteger('HeadingVariable'), VM_UPDATE);
+        $this->RegisterReference($this->ReadPropertyInteger('HeadingVariable'));
+}
 
         $this->UpdateMap();
     }
@@ -90,11 +95,27 @@ class PositionTracking extends WebHookModule
         }
     }
 
-    public function SendLocation(string $location)
+    public function SendLocation(string $locationJson = '')
     {
+        $lat = GetValue($this->ReadPropertyInteger('SourceLatitude'));
+        $lng = GetValue($this->ReadPropertyInteger('SourceLongitude'));
+        $heading = 0;
+    
+        if ($this->ReadPropertyInteger('HeadingVariable') > 0) {
+            $heading = GetValue($this->ReadPropertyInteger('HeadingVariable'));
+        }
+    
+        $location = json_encode([
+            'latitude' => $lat,
+            'longitude' => $lng,
+            'heading' => $heading
+        ]);
+    
         $hcID = IPS_GetInstanceListByModuleID('{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}')[0];
         WC_PushMessage($hcID, '/hook/position_tracking/' . $this->InstanceID, $location);
     }
+    
+
 
     /**
      * This function will be called by the hook control. Visibility should be protected!
