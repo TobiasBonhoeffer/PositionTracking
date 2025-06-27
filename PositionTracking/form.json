@@ -17,6 +17,11 @@
             "caption": "Tracker Longitude"
         },
         {
+          "type": "SelectVariable",
+          "name": "HeadingVariable",
+          "caption": "Tracker Heading (°)"
+        },
+        {
             "type": "SelectVariable",
             "name": "HomeLatitude",
             "caption": "Home Latitude"
