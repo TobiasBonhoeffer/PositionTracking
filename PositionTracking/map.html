@@ -170,11 +170,13 @@
                     const trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
                     const heading = data.heading || 0;
 
+
+                    
                     const icon = {
                         url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
                             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
                                 <g transform="rotate(${heading}, 50, 50)">
-                                    <image href="data:image/png;base64,${tracker_icon}" height="100" width="100"/>
+                                    <image href="data:image/png;base64,${window.trackerBase64}" height="100" width="100"/>
                                 </g>
                             </svg>
                         `),
