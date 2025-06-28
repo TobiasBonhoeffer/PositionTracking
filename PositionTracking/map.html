@@ -17,13 +17,15 @@
     </style>
 
     <script>
-        window.detectLocation = function () {
-            return {
-                protocol: window.location.protocol,
-                host: window.location.host
-            };
-        };
-
+            window.detectLocation = function () {
+                // Fallback directly to your Symcon server IP or domain
+                return {
+                    protocol: "http:",                      // or "https:" if you use HTTPS
+                    host: "192.168.1.100:3777"              // <-- replace with your actual Symcon IP + port
+                };
+            }
+        
+        
         window.useMap = function (id, home, map_center, home_icon, tracker_icon) {
             const map = { id, home, map_center, home_icon, tracker_icon };
 
