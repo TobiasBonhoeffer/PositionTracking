@@ -111,6 +111,32 @@
                 window.trackerMarker[id].setIcon(icon);
             }
         }
+           fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
+                .then(response => response.json())
+                .then(data => {
+                    const trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
+                    const heading = data.heading || 0;
+
+                    const icon = {
+                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                                <g transform="rotate(${heading}, 50, 50)">
+                                    <image href="data:image/png;base64,${tracker_icon}" height="100" width="100"/>
+                                </g>
+                            </svg>
+                        `),
+                        scaledSize: new google.maps.Size(36, 36)
+                    };
+
+                    window.trackerMarker[id] = new google.maps.Marker({
+                        position: trackerLatLng,
+                        map: window.map[id],
+                        icon: icon
+                    });
+
+                    window.trackerMarkerState[id] = "follow";
+                });
+        }
 
         window.initMaps = function () {
             for (const map of window.deferredMaps) {
@@ -161,33 +187,7 @@
                 }
             });
 
-            fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
-                .then(response => response.json())
-                .then(data => {
-                    const trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
-                    const heading = data.heading || 0;
-
-                    const icon = {
-                        url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-                                <g transform="rotate(${heading}, 50, 50)">
-                                    <image href="data:image/png;base64,${tracker_icon}" height="100" width="100"/>
-                                </g>
-                            </svg>
-                        `),
-                        scaledSize: new google.maps.Size(36, 36)
-                    };
-
-                    window.trackerMarker[id] = new google.maps.Marker({
-                        position: trackerLatLng,
-                        map: window.map[id],
-                        icon: icon
-                    });
-
-                    window.trackerMarkerState[id] = "follow";
-                });
-        }
-
+ 
         useMap(
             parseInt('{%id%}'),
             '{%home%}',
