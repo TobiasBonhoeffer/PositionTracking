@@ -1,5 +1,7 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <style>
         html, body {
             margin: 0;
@@ -12,68 +14,22 @@
             height: 100%;
             width: 100%;
         }
-
-        .map-button-id {
-            appearance: button;
-            background-color: #fff;
-            border: 0;
-            border-radius: 2px;
-            box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            margin: 10px;
-            padding: 0 0.5em;
-            height: 40px;
-            font: 400 16px Roboto, Arial, sans-serif;
-            overflow: hidden;
-        }
-
-        .map-button-id:hover {
-            background: #ebebeb;
-        }
     </style>
 
     <script>
         window.detectLocation = function () {
-            const getBaseHref = (html) => {
-                const match = html.match(/<base href="(http:|https:)\/\/(.*?)[\/]*"[\/]*>/);
-                return match ? { protocol: match[1], host: match[2] } : null;
-            };
-
-            if (window.location.href.startsWith("data:")) {
-                const data = decodeURIComponent(window.location.href);
-                const info = getBaseHref(data);
-                if (info) return info;
-                document.write("Cannot detect protocol/host on IPSStudio Client!");
-                throw 'Cannot detect protocol/host on IPSStudio Client!';
-            }
-
-            if (window.location.href === 'about:blank') {
-                return getBaseHref(document.head.innerHTML) || {
-                    protocol: window.top.location.protocol,
-                    host: window.top.location.host
-                };
-            }
-
-            if (window.location.href === 'about:srcdoc') {
-                return getBaseHref(document.body.innerHTML) || {
-                    protocol: window.top.location.protocol,
-                    host: window.top.location.host
-                };
-            }
-
             return {
                 protocol: window.location.protocol,
                 host: window.location.host
             };
-        }
+        };
 
         window.useMap = function (id, home, map_center, home_icon, tracker_icon) {
             const map = { id, home, map_center, home_icon, tracker_icon };
 
-            if (typeof (google) === 'undefined') {
+            if (typeof google === 'undefined') {
                 window.google = null;
                 window.mapZoom = {%zoom%};
-                window.socket = [];
                 window.map = [];
                 window.homeMarker = [];
                 window.trackerMarker = [];
@@ -82,7 +38,6 @@
                 window.deferredMaps = [map];
 
                 const script = document.createElement("script");
-                script.type = "text/javascript";
                 script.src = "//maps.googleapis.com/maps/api/js?key={%apikey%}&callback=initMaps";
                 document.head.appendChild(script);
             } else if (google === null) {
@@ -90,70 +45,60 @@
             } else {
                 window.initMap(id, home, map_center, home_icon, tracker_icon);
             }
-        }
-
-        window.moveMapMarker = function (id, latitude, longitude, heading) {
-            if (typeof (window.trackerMarker[id]) !== 'undefined') {
-                const latLng = new google.maps.LatLng(latitude, longitude);
-
-                const icon = {
-                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-                            <g transform="rotate(${heading}, 50, 50)">
-                                <image href="data:image/png;base64,${window.trackerBase64}" height="100" width="100"/>
-                            </g>
-                        </svg>
-                    `),
-                    scaledSize: new google.maps.Size(36, 36)
-                };
-
-                window.trackerMarker[id].setPosition(latLng);
-                window.trackerMarker[id].setIcon(icon);
-            }
-        }
+        };
 
         window.initMaps = function () {
             for (const map of window.deferredMaps) {
                 window.initMap(map.id, map.home, map.map_center, map.home_icon, map.tracker_icon);
             }
-        }
+        };
+
+        window.moveMapMarker = function (id, lat, lng, heading) {
+            const position = new google.maps.LatLng(lat, lng);
+            const icon = {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+                        <g transform="rotate(${heading}, 50, 50)">
+                            <image href="data:image/png;base64,${window.trackerBase64}" height="100" width="100"/>
+                        </g>
+                    </svg>
+                `),
+                scaledSize: new google.maps.Size(36, 36)
+            };
+
+            if (!window.trackerMarker[id]) {
+                window.trackerMarker[id] = new google.maps.Marker({
+                    position: position,
+                    map: window.map[id],
+                    icon: icon
+                });
+            } else {
+                window.trackerMarker[id].setPosition(position);
+                window.trackerMarker[id].setIcon(icon);
+            }
+        };
 
         window.initMap = function (id, home, map_center, home_icon, tracker_icon) {
             const location = window.detectLocation();
             window.trackerBase64 = tracker_icon;
 
-            if (window.socket[id]) {
-                window.socket[id].close();
-            }
-
-            window.socket[id] = new WebSocket(
-                location.protocol.replace(/^http/, 'ws') +
-                "//" + location.host + "/hook/position_tracking/" + id
-            );
-
-            window.socket[id].addEventListener('message', function (event) {
-                const data = JSON.parse(event.data);
-                window.moveMapMarker(id, data.latitude, data.longitude, data.heading || 0);
-            });
-
-            const homeLocation = JSON.parse(home);
-            const centerLocation = JSON.parse(map_center);
-            const homeLatLng = new google.maps.LatLng(homeLocation.latitude, homeLocation.longitude);
-            const centerLatLng = new google.maps.LatLng(centerLocation.latitude, centerLocation.longitude);
-
-            const options = {
+            const homePos = JSON.parse(home);
+            const centerPos = JSON.parse(map_center);
+            const mapOptions = {
                 zoom: window.mapZoom,
-                center: centerLatLng,
+                center: new google.maps.LatLng(centerPos.latitude, centerPos.longitude),
                 mapTypeId: '{%maptype%}',
                 streetViewControl: false,
                 rotateControl: false,
                 fullscreenControl: false
             };
 
-            window.map[id] = new google.maps.Map(document.getElementById('map-canvas-' + id), options);
+            window.map[id] = new google.maps.Map(
+                document.getElementById('map-canvas-' + id), mapOptions
+            );
 
             window.homeMarker[id] = new google.maps.Marker({
-                position: homeLatLng,
+                position: new google.maps.LatLng(homePos.latitude, homePos.longitude),
                 map: window.map[id],
                 icon: {
                     url: 'data:image/png;base64,' + home_icon,
@@ -161,35 +106,28 @@
                 }
             });
 
-            google.maps.event.addListenerOnce(window.map[id], 'tilesloaded', () => {
-    fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
-        .then(response => response.json())
-        .then(data => {
-            const trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
-            const heading = data.heading || 0;
+            // Fetch initial position
+            fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Initial tracker data:", data);
+                    window.moveMapMarker(id, data.latitude, data.longitude, data.heading || 0);
+                })
+                .catch(error => console.error("Error fetching initial tracker data:", error));
 
-            const icon = {
-                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
-                        <g transform="rotate(${heading}, 50, 50)">
-                            <image href="data:image/png;base64,${tracker_icon}" height="100" width="100"/>
-                        </g>
-                    </svg>
-                `),
-                scaledSize: new google.maps.Size(36, 36)
-            };
+            // WebSocket updates
+            const ws = new WebSocket(
+                location.protocol.replace("http", "ws") +
+                "//" + location.host + "/hook/position_tracking/" + id
+            );
 
-            window.trackerMarker[id] = new google.maps.Marker({
-                position: trackerLatLng,
-                map: window.map[id],
-                icon: icon
+            ws.addEventListener('message', function (event) {
+                const data = JSON.parse(event.data);
+                window.moveMapMarker(id, data.latitude, data.longitude, data.heading || 0);
             });
+        };
 
-            window.trackerMarkerState[id] = "follow";
-        });
-});
-        }
-
+        // Load the map with required data
         useMap(
             parseInt('{%id%}'),
             '{%home%}',
