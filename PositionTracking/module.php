@@ -135,17 +135,28 @@ class PositionTracking extends WebHookModule
 
     private function GetTrackerLocation()
     {
-        if (!$this->ReadPropertyInteger('SourceLatitude') || !$this->ReadPropertyInteger('SourceLongitude')) {
-            return json_encode([
-                'latitude'  => 0,
-                'longitude' => 0
-            ]);
+        $lat = 0;
+        $lng = 0;
+        $heading = 0;
+    
+        if ($this->ReadPropertyInteger('SourceLatitude') > 0) {
+            $lat = GetValue($this->ReadPropertyInteger('SourceLatitude'));
         }
+    
+        if ($this->ReadPropertyInteger('SourceLongitude') > 0) {
+            $lng = GetValue($this->ReadPropertyInteger('SourceLongitude'));
+        }
+    
+        if ($this->ReadPropertyInteger('HeadingVariable') > 0) {
+            $heading = GetValue($this->ReadPropertyInteger('HeadingVariable'));
+        }
+    
         return json_encode([
-            'latitude'  => GetValue($this->ReadPropertyInteger('SourceLatitude')),
-            'longitude' => GetValue($this->ReadPropertyInteger('SourceLongitude'))
+            'latitude'  => $lat,
+            'longitude' => $lng,
+            'heading'   => $heading
         ]);
-    }
+}
 
     private function UpdateMap()
     {
