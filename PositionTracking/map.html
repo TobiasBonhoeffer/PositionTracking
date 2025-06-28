@@ -34,33 +34,42 @@
 
     <script>
         window.detectLocation = function () {
+            const getBaseHref = (html) => {
+                const match = html.match(/<base href="(http:|https:)\/\/(.*?)[\/]*"[\/]*>/);
+                return match ? { protocol: match[1], host: match[2] } : null;
+            };
+
             if (window.location.href.startsWith("data:")) {
                 const data = decodeURIComponent(window.location.href);
-                const match = data.match(/<base href="(http:|https:)\/\/(.*?)[\/]*"[\/]*>/);
-                if (match) return { protocol: match[1], host: match[2] };
+                const info = getBaseHref(data);
+                if (info) return info;
+                document.write("Cannot detect protocol/host on IPSStudio Client!");
                 throw 'Cannot detect protocol/host on IPSStudio Client!';
-            } else if (window.location.href === 'about:blank') {
-                const match = document.head.innerHTML.match(/<base href="(http:|https:)\/\/(.*?)[\/]*"[\/]*>/);
-                return match ? { protocol: match[1], host: match[2] } : {
+            }
+
+            if (window.location.href === 'about:blank') {
+                return getBaseHref(document.head.innerHTML) || {
                     protocol: window.top.location.protocol,
                     host: window.top.location.host
-                };
-            } else if (window.location.href === 'about:srcdoc') {
-                const match = document.body.innerHTML.match(/<base href="(http:|https:)\/\/(.*?)[\/]*"[\/]*>/);
-                return match ? { protocol: match[1], host: match[2] } : {
-                    protocol: window.top.location.protocol,
-                    host: window.top.location.host
-                };
-            } else {
-                return {
-                    protocol: window.location.protocol,
-                    host: window.location.host
                 };
             }
-        };
 
-        window.useMap = function (id, home, home_icon, tracker_icon) {
-            const mapConfig = { id, home, home_icon, tracker_icon };
+            if (window.location.href === 'about:srcdoc') {
+                return getBaseHref(document.body.innerHTML) || {
+                    protocol: window.top.location.protocol,
+                    host: window.top.location.host
+                };
+            }
+
+            return {
+                protocol: window.location.protocol,
+                host: window.location.host
+            };
+        }
+
+        window.useMap = function (id, home, map_center, home_icon, tracker_icon) {
+            const map = { id, home, map_center, home_icon, tracker_icon };
+
             if (typeof (google) === 'undefined') {
                 window.google = null;
                 window.mapZoom = {%zoom%};
@@ -69,17 +78,19 @@
                 window.homeMarker = [];
                 window.trackerMarker = [];
                 window.trackerMarkerState = [];
-                window.derferredMaps = [mapConfig];
+                window.trackerBase64 = tracker_icon;
+                window.deferredMaps = [map];
+
                 const script = document.createElement("script");
                 script.type = "text/javascript";
                 script.src = "//maps.googleapis.com/maps/api/js?key={%apikey%}&callback=initMaps";
-                document.getElementsByTagName("head")[0].appendChild(script);
+                document.head.appendChild(script);
             } else if (google === null) {
-                window.derferredMaps.push(mapConfig);
+                window.deferredMaps.push(map);
             } else {
-                window.initMap(id, home, home_icon, tracker_icon);
+                window.initMap(id, home, map_center, home_icon, tracker_icon);
             }
-        };
+        }
 
         window.moveMapMarker = function (id, latitude, longitude, heading) {
             if (typeof (window.trackerMarker[id]) !== 'undefined') {
@@ -99,24 +110,40 @@
                 window.trackerMarker[id].setPosition(latLng);
                 window.trackerMarker[id].setIcon(icon);
             }
-        };
+        }
 
         window.initMaps = function () {
-            for (const map of window.derferredMaps) {
-                window.initMap(map.id, map.home, map.home_icon, map.tracker_icon);
+            for (const map of window.deferredMaps) {
+                window.initMap(map.id, map.home, map.map_center, map.home_icon, map.tracker_icon);
             }
-        };
+        }
 
-        window.initMap = function (id, home, home_icon, tracker_icon) {
+        window.initMap = function (id, home, map_center, home_icon, tracker_icon) {
             const location = window.detectLocation();
             window.trackerBase64 = tracker_icon;
 
+            if (window.socket[id]) {
+                window.socket[id].close();
+            }
+
+            window.socket[id] = new WebSocket(
+                location.protocol.replace(/^http/, 'ws') +
+                "//" + location.host + "/hook/position_tracking/" + id
+            );
+
+            window.socket[id].addEventListener('message', function (event) {
+                const data = JSON.parse(event.data);
+                window.moveMapMarker(id, data.latitude, data.longitude, data.heading || 0);
+            });
+
             const homeLocation = JSON.parse(home);
+            const centerLocation = JSON.parse(map_center);
             const homeLatLng = new google.maps.LatLng(homeLocation.latitude, homeLocation.longitude);
+            const centerLatLng = new google.maps.LatLng(centerLocation.latitude, centerLocation.longitude);
 
             const options = {
                 zoom: window.mapZoom,
-                center: homeLatLng,
+                center: centerLatLng,
                 mapTypeId: '{%maptype%}',
                 streetViewControl: false,
                 rotateControl: false,
@@ -125,7 +152,6 @@
 
             window.map[id] = new google.maps.Map(document.getElementById('map-canvas-' + id), options);
 
-            // Home marker
             window.homeMarker[id] = new google.maps.Marker({
                 position: homeLatLng,
                 map: window.map[id],
@@ -135,7 +161,6 @@
                 }
             });
 
-            // Load initial tracker location
             fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
                 .then(response => response.json())
                 .then(data => {
@@ -161,20 +186,15 @@
 
                     window.trackerMarkerState[id] = "follow";
                 });
+        }
 
-            // Setup WebSocket for live updates
-            window.socket[id] = new WebSocket(
-                location.protocol.replace(/^http/, 'ws') +
-                "//" + location.host + "/hook/position_tracking/" + id
-            );
-
-            window.socket[id].addEventListener('message', function (event) {
-                const data = JSON.parse(event.data);
-                window.moveMapMarker(id, data.latitude, data.longitude, data.heading || 0);
-            });
-        };
-
-        useMap(parseInt('{%id%}'), '{%home%}', '{%home_icon%}', '{%tracker_icon%}');
+        useMap(
+            parseInt('{%id%}'),
+            '{%home%}',
+            '{%map_center%}',
+            '{%home_icon%}',
+            '{%tracker_icon%}'
+        );
     </script>
 </head>
 <body>
