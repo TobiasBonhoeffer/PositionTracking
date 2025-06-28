@@ -164,6 +164,9 @@
             fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
                 .then(response => response.json())
                 .then(data => {
+                    
+                    console.log("Initial fetch data:", data); //DEBUG
+                    
                     const trackerLatLng = new google.maps.LatLng(data.latitude, data.longitude);
                     const heading = data.heading || 0;
 
@@ -177,6 +180,7 @@
                         `),
                         scaledSize: new google.maps.Size(36, 36)
                     };
+                    console.log("Creating tracker marker with icon:", icon);  // <-- add this line
                     console.log("Initial fetch data:", data); //DEBUG
                     window.trackerMarker[id] = new google.maps.Marker({
                         position: trackerLatLng,
