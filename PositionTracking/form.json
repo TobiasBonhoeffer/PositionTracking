@@ -28,6 +28,11 @@
         },
         {
             "type": "SelectVariable",
+            "name": "HomeLongitude",
+            "caption": "Home Longitude"
+        },
+        {
+            "type": "SelectVariable",
             "name": "MapCenterLongitude",
             "caption": "Map Center Longitude"
         },
@@ -35,11 +40,6 @@
             "type": "SelectVariable",
             "name": "MapCenterLatitude",
             "caption": "Map Center Latitude"
-        },
-        {
-            "type": "SelectVariable",
-            "name": "HomeLongitude",
-            "caption": "Home Longitude"
         },
         {
             "type": "NumberSpinner",
