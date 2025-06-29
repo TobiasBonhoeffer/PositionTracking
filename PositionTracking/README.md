@@ -44,7 +44,7 @@ Home Longitude      | Variable, welche die Längengrad der Position der Ladestat
 Map Center Latitude | Variable, welche die Breitengrad des Zentrum der Karte enthält
 Map Center Longitude| Variable, welche die Längengrad des Zentrum der Karte enthält
 Zoom Level	    | Zoom Level für die Google Map (1-21)
-Map Type	    | Satellite, Road, etc
+Map Type	    | Satellite, Roadmap, Hybrid, Terrain
 Updatelimitierung   | Maximales Updateintervall in Sekunden (Das GPS sendet normalerweise jede Sekunden - um Traffic zu sparen empfiehlt es sich diesen Wert höher zu stellen, sodass die Position auf der Karte nur alle X Sekunden aktualisiert wird)
 Icon (Home)         | Icon (PNG, JPEG) für den Standort, der im Location Control hinterlegt ist
 Icon (Tracker)      | Icon (PNG, JPEG) für das sich bewegende Objekt
