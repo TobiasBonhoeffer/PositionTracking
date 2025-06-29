@@ -109,6 +109,7 @@
 
                 window.trackerMarker[id].setPosition(latLng);
                 window.trackerMarker[id].setIcon(icon);
+                window.trackerMarker[id].setZIndex(1); // just to be sure ste ZIndex again
             }
         }
 
@@ -158,7 +159,8 @@
                 icon: {
                     url: 'data:image/png;base64,' + home_icon,
                     scaledSize: new google.maps.Size(36, 36)
-                }
+                },
+                zIndex: 0
             });
 
             fetch(location.protocol + "//" + location.host + "/hook/position_tracking/" + id)
@@ -181,7 +183,8 @@
                     window.trackerMarker[id] = new google.maps.Marker({
                         position: trackerLatLng,
                         map: window.map[id],
-                        icon: icon
+                        icon: icon,
+                        zIndex: 1
                     });
 
                     window.trackerMarkerState[id] = "follow";
