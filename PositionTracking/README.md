@@ -2,7 +2,7 @@
 Erlaubt das Tracken z.B. von RoboMähern auf einer interaktiven Google Maps Karte. Basiert auf einem Modul von Paresy. Änderungen: 
 - Karte kann separat verschoben werden (ist nicht immer um den Tracker zentriert).
 - Home-Icon (Ladestation) kann separat plaziert werden. 
-- Tracker-Icon kann mit den "Rotation" Parameter gedreht werden.
+- Tracker-Icon kann mit den "Heading" Parameter gedreht werden.
 
 ### Inhaltsverzeichnis
 
