@@ -1,5 +1,8 @@
 # PositionTracking
-Erlaubt das Tracken z.B. von RoboMähern auf einer interaktiven Google Maps Karte. Basiert auf einem Modul von Paresy
+Erlaubt das Tracken z.B. von RoboMähern auf einer interaktiven Google Maps Karte. Basiert auf einem Modul von Paresy. Änderungen: 
+- Karte kann separat verschoben werden (ist nicht immer um den Tracker zentriert).
+- Home-Icon (Ladestation) kann separat plaziert werden. 
+- Tracker-Icon kann mit den "Heading" Parameter gedreht werden.
 
 ### Inhaltsverzeichnis
 
@@ -31,15 +34,20 @@ Erlaubt das Tracken z.B. von RoboMähern auf einer interaktiven Google Maps Kart
 
 __Konfigurationsseite__:
 
-Name               | Beschreibung
------------------- | ------------------
-Breitengrad        | Variable, welche die Breitengrad Angabe enthält
-Längengrad         | Variable, welche die Längengrad Angabe enthält
-Updatelimitierung  | Maximales Updateintervall in Sekunden (Das GPS sendet normalerweise jede Sekunden - um Traffic zu sparen empfiehlt es sich diesen Wert höher zu stellen, sodass die Position auf der Karte nur alle X Sekunden aktualisiert wird)
-Karte (Breite)     | Breite der Karte in px oder %
-Karte (Höhe)       | Höhe der Karte in px oder %
-Icon (Home)        | Icon (PNG, JPEG) für den Standort, der im Location Control hinterlegt ist
-Icon (Tracker)     | Icon (PNG, JPEG) für das sich bewegende Objekt
+Name                | Beschreibung
+------------------- | ------------------
+Tracker Latitude    | Variable, welche die Breitengrad der Position des Robo Mähers enthält
+Tracker Longitude   | Variable, welche die Längengrad der Position des Robo Mähers enthält
+Tracker Heading     | Variable, welche die Rotation des Robo Mähers enthält
+Home Latitude       | Variable, welche die Breitengrad der Position der Ladestation enthält
+Home Longitude      | Variable, welche die Längengrad der Position der Ladestation enthält
+Map Center Latitude | Variable, welche die Breitengrad des Zentrum der Karte enthält
+Map Center Longitude| Variable, welche die Längengrad des Zentrum der Karte enthält
+Zoom Level	    | Zoom Level für die Google Map (1-21)
+Map Type	    | Satellite, Road, etc
+Updatelimitierung   | Maximales Updateintervall in Sekunden (Das GPS sendet normalerweise jede Sekunden - um Traffic zu sparen empfiehlt es sich diesen Wert höher zu stellen, sodass die Position auf der Karte nur alle X Sekunden aktualisiert wird)
+Icon (Home)         | Icon (PNG, JPEG) für den Standort, der im Location Control hinterlegt ist
+Icon (Tracker)      | Icon (PNG, JPEG) für das sich bewegende Objekt
 
 ### 5. Statusvariablen und Profile
 
